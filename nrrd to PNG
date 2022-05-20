@@ -1,0 +1,61 @@
+import getpass
+
+from PIL import Image
+import nrrd
+import time
+import os
+import matplotlib.pyplot as plt
+
+def conv_pic():
+	user_name = getpass.getuser()
+	dq_path = f'/Users/{user_name}/DeskTop'
+	nrrd_filename = dq_path + '/源数据.nrrd'
+	nrrd_data, nrrd_options = nrrd.read(nrrd_filename)
+	# print(nrrd_data.shape)
+	# print(nrrd_data)
+	# print(nrrd_options)
+	print("开始进行nrrd读取，转换png，请稍后。。。")
+	start = time.time()
+	if not os.path.exists(dq_path + '/nrrd图库'):
+		os.makedirs(dq_path + '/nrrd图库/')
+	data_path = dq_path + '/源数据.nrrd'
+	save_path = dq_path + '/nrrd图库'
+	data, options = nrrd.read(data_path)
+	for i in range(data.shape[2]):
+		img=Image.fromarray(data[:,:,i])
+		temp_path = save_path + '/' + str(i) + '.png'
+		img.convert('RGB').save(temp_path)
+	end = time.time()
+	print("总共花费时间:%.2f秒"%(end-start))
+	print("完成！")
+
+def show():
+	user_name = getpass.getuser()
+	dq_path = f'/Users/{user_name}/DeskTop'
+	path=dq_path+'/nrrd图库/'
+	allpng = []
+
+	for f in os.listdir(path):
+		if f.endswith('.png'):
+			allpng.append(f)
+
+	allpng.sort(key= lambda x:int(x[:-4]))
+	i=0
+	while i<len(allpng):
+		plt.clf()
+		name_of_pic = allpng[i]
+		img = plt.imread(path + name_of_pic)
+		title = "Num:" + str(i) + " nrrd to png"
+		plt.title(title, fontsize=25, color='red')
+		plt.xticks([])
+		plt.yticks([])
+		plt.imshow(img)
+		i=i+1
+
+		plt.pause(0.01)
+		plt.ioff()
+	plt.show()
+
+if __name__ == "__main__":
+	conv_pic()
+	show()
