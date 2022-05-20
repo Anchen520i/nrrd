@@ -1,0 +1,14 @@
+import nrrd # pip install pynrrd
+import nibabel as nib # pip install nibabel
+import numpy as np
+
+# load nrrd
+_nrrd = nrrd.read('nrrd源文件路径')
+data = _nrrd[0]
+header = _nrrd[1]
+# print data.shape, header
+print(data)
+print(header)
+# save nifti
+img = nib.Nifti1Image(data, np.eye(4))
+nib.save(img,'nii保存路径/名称.nii.gz')
