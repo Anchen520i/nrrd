@@ -1,0 +1,26 @@
+from PIL import Image
+import nrrd
+import time
+
+def conv_pic():
+	nrrd_filename = '/Users/a-/Desktop/源数据.nrrd'
+	nrrd_data, nrrd_options = nrrd.read(nrrd_filename)
+	# print(nrrd_data.shape)
+	# print(nrrd_data)
+	# print(nrrd_options)
+	print("开始进行nrrd读取，转换png，请稍后。。。")
+	start = time.time()
+	data_path = '/Users/a-/Desktop/源数据.nrrd'
+	save_path = '/Users/a-/PycharmProjects/nrrd/图片'
+	data, options = nrrd.read(data_path)
+	for i in range(data.shape[2]):
+		img=Image.fromarray(data[:,:,i])
+		temp_path = save_path + '/' + str(i) + '.png'
+		img.convert('RGB').save(temp_path)
+	end = time.time()
+	print("总共花费时间:%.2f秒"%(end-start))
+	print("完成！")
+
+
+if __name__ == "__main__":
+	conv_pic()
