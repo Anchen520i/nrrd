@@ -12,3 +12,32 @@ print(header)
 # save nifti
 img = nib.Nifti1Image(data, np.eye(4))
 nib.save(img,'nii保存路径/名称.nii.gz')
+
+
+
+新源代码
+import getpass
+
+import nibabel as nib  # pip install nibabel
+import numpy as np
+import os
+import nrrd  # pip install pynrrd
+
+# load nrrd
+user_name = getpass.getuser()
+file_path = u'源数据.nrrd'  # 要读取的文件
+read_path = u'/Users/{un}/Desktop/{fn}'.format(un=user_name, fn=file_path)
+_nrrd = nrrd.read(read_path)
+data = _nrrd[0]
+header = _nrrd[1]
+# print data.shape, header
+print(data)
+print(header)
+# save nifti
+img = nib.Nifti1Image(data, np.eye(4))
+save_dir_name = u'nrrd'  # 保存到桌面的文件夹名字
+save_path = u'/Users/{un}/Desktop/{sn}'.format(un=user_name, sn=save_dir_name)
+if not os.path.exists(save_path):
+    os.mkdir(save_path)
+file_name = u'nrrd.nii.gz'  # 保存到桌面文件夹的文件名
+nib.save(img, f'{save_path}/{file_name}')
